@@ -132,31 +132,55 @@
         @keyframes slideL { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
 
         @media (max-width: 900px) {
-            .section-1 { flex-direction: column; }
-            .s1-left { flex: none; padding: 50px 25px 25px; order: 2; }
-            .s1-right { flex: 1; order: 1; min-height: 45vh; }
+            .section { position: absolute; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+
+            .section-1 { flex-direction: column; min-height: 100vh; height: auto; }
+            .s1-left { flex: none; padding: 50px 25px 30px; order: 2; }
+            .s1-right { flex: none; order: 1; height: 50vh; min-height: 300px; }
             .s1-photo { clip-path: polygon(0 0,100% 0,100% 85%,0% 100%); height: 100%; max-width: 100%; }
             .s1-watermark { writing-mode: horizontal-tb; top: 30%; right: auto; left: 50%; transform: translate(-50%,-50%); font-size: 100px; }
             .s1-name { font-size: 55px; }
             .s1-signature { font-size: 35px; }
-            .section-2 { padding: 50px 20px 30px; flex-direction: column; justify-content: flex-start; overflow-y: auto; }
-            .s2-frame { top: 50px; left: 15px; right: 15px; bottom: 20px; }
-            .s2-content { flex-direction: column; text-align: center; gap: 25px; padding-top: 15px; }
+
+            .section-2 { padding: 70px 20px 40px; min-height: 100vh; height: auto; }
+            .s2-frame { top: 70px; left: 15px; right: 15px; bottom: 30px; }
+            .s2-content { flex-direction: column; text-align: center; gap: 25px; padding-top: 10px; }
             .s2-left, .s2-right { max-width: 100%; }
             .s2-right { text-align: center; }
             .s2-photo-wrap { order: -1; }
-            .s2-photo { width: 65vw; height: 50vh; }
+            .s2-photo { width: 60vw; height: 45vh; }
             .s2-katakana, .s2-bottom { display: none; }
-            .section-3 { padding: 50px 20px; }
+
+            .section-3 { padding: 70px 20px 60px; min-height: 100vh; height: auto; flex-direction: column; }
+            .s3-deco-1 { font-size: 150px; }
+            .s3-deco-2, .s3-deco-3 { display: none; }
+            .s3-hearts { display: none; }
+            .s3-content { padding: 20px 0 40px; }
+            .s3-big { font-size: 36px; margin-bottom: 20px; }
+            .s3-text { font-size: 13px; line-height: 1.8; margin-bottom: 20px; }
+            .s3-rom { font-size: 16px; margin-bottom: 25px; }
+            .s3-photo { width: 150px; height: 150px; }
+            .s3-photo-ring { inset: -10px; }
+            .s3-bottom { position: relative; bottom: auto; left: auto; transform: none; margin-top: 30px; }
+
             .dots { right: 12px; }
             .dot { width: 8px; height: 8px; }
         }
 
         @media (max-width: 480px) {
-            .s1-left { padding: 45px 18px 20px; }
+            .s1-left { padding: 40px 18px 25px; }
             .s1-name { font-size: 48px; letter-spacing: 3px; }
-            .s1-photo { height: 40vh; }
-            .s2-photo { width: 75vw; height: 45vh; }
+            .s1-subtitle { font-size: 12px; }
+            .s1-desc { font-size: 11px; }
+            .s1-signature { font-size: 28px; }
+            .s1-right { height: 40vh; min-height: 250px; }
+
+            .s2-photo { width: 70vw; height: 40vh; }
+
+            .s3-big { font-size: 30px; }
+            .s3-text { font-size: 12px; }
+            .s3-photo { width: 130px; height: 130px; }
+
             .corner, .credit { display: none; }
         }
     </style>
