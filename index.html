@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЛИЛЯ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; overflow: hidden; background: #f0ebe4; }
+
+        /* Preloader */
+        .preloader { position: fixed; inset: 0; background: #f0ebe4; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.8s, visibility 0.8s; gap: 15px; }
+        .preloader.hide { opacity: 0; visibility: hidden; }
+        .preloader-heart { width: 50px; height: 50px; position: relative; animation: beat 1s infinite; }
+        .preloader-heart::before, .preloader-heart::after { content: ''; position: absolute; width: 25px; height: 40px; background: #ff6b8a; border-radius: 25px 25px 0 0; }
+        .preloader-heart::before { left: 25px; transform: rotate(-45deg); transform-origin: 0 100%; }
+        .preloader-heart::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
+        @keyframes beat { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .preloader-text { font-family: 'Pacifico', cursive; font-size: 20px; color: #ff6b8a; }
+
+        /* Paper */
+        .paper-bg { position: fixed; inset: 0; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 500 500' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E"), linear-gradient(135deg, #f0ebe4 0%, #e8e0d6 50%, #f0ebe4 100%); z-index: -2; }
+
+        /* Marquee */
+        .marquee-wrap { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(0,0,0,0.9); padding: 10px 0; overflow: hidden; }
+        .marquee-track { display: flex; width: max-content; animation: scroll 30s linear infinite; }
+        .marquee-track:hover { animation-play-state: paused; }
+        .marquee-item { display: flex; align-items: center; gap: 12px; padding: 0 30px; white-space: nowrap; }
+        .marquee-item .text { font-family: 'Pacifico', cursive; font-size: 14px; color: white; }
+        .marquee-item .text.hl { color: #ff6b8a; }
+        .marquee-item .lang { font-size: 9px; color: rgba(255,255,255,0.25); letter-spacing: 1.5px; text-transform: uppercase; }
+        .marquee-item .sep { width: 5px; height: 5px; background: #ff6b8a; border-radius: 50%; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Sections */
+        .section { position: fixed; inset: 0; opacity: 0; visibility: hidden; transition: opacity 0.7s, visibility 0.7s; }
+        .section.active { opacity: 1; visibility: visible; }
+
+        /* Section 1 */
+        .section-1 { display: flex; padding-top: 36px; }
+        .s1-left { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 60px 5vw 40px; z-index: 2; }
+        .s1-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(65px,12vw,160px); line-height: 0.85; letter-spacing: 6px; color: #1a1a1a; overflow: hidden; }
+        .s1-name span { display: block; animation: nameIn 1s ease-out 0.5s both; }
+        @keyframes nameIn { from { transform: translateY(110%); } to { transform: translateY(0); } }
+        .s1-subtitle { font-size: 13px; font-weight: 600; color: #1a1a1a; margin: 15px 0 12px; opacity: 0; animation: fadeUp 0.7s ease-out 0.8s both; }
+        .s1-desc { font-size: 12px; line-height: 1.9; color: #666; margin-bottom: 18px; max-width: 360px; opacity: 0; animation: fadeUp 0.7s ease-out 1s both; }
+        .s1-rom { font-size: 13px; color: #ff6b8a; font-style: italic; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.7s ease-out 1.1s both; }
+        .s1-social { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; opacity: 0; animation: fadeUp 0.7s ease-out 1.2s both; }
+        .s1-social .avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+        .s1-social a { font-size: 11px; color: #1a1a1a; text-decoration: none; font-weight: 500; }
+        .s1-signature { font-family: 'Pacifico', cursive; font-size: clamp(36px,5vw,65px); color: #1a1a1a; transform: rotate(-3deg); margin-bottom: 30px; opacity: 0; animation: fadeUp 0.7s ease-out 1.35s both; }
+        .s1-buttons { display: flex; gap: 12px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.7s ease-out 1.5s both; }
+        .btn { padding: 12px 24px; border-radius: 25px; font-size: 10px; font-weight: 700; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; text-decoration: none; border: 2px solid #1a1a1a; }
+        .btn-fill { background: #1a1a1a; color: white; }
+        .btn-fill:hover { background: transparent; color: #1a1a1a; }
+        .btn-outline { background: transparent; color: #1a1a1a; }
+        .btn-outline:hover { background: #1a1a1a; color: white; }
+
+        .s1-right { flex: 1; position: relative; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+        .s1-watermark { position: absolute; top: 50%; right: 5%; transform: translateY(-50%); font-family: 'Bebas Neue', sans-serif; font-size: clamp(120px,20vw,300px); color: rgba(0,0,0,0.025); letter-spacing: 15px; writing-mode: vertical-rl; pointer-events: none; }
+        .s1-photo { width: 100%; max-width: 650px; height: calc(100vh - 36px); object-fit: cover; object-position: center 15%; clip-path: polygon(12% 0, 100% 0, 100% 100%, 0% 100%); z-index: 1; opacity: 0; animation: photoIn 1.2s ease-out 0.4s both; }
+        @keyframes photoIn { from { opacity: 0; clip-path: polygon(50% 0,50% 0,50% 100%,50% 100%); } to { opacity: 1; clip-path: polygon(12% 0,100% 0,100% 100%,0% 100%); } }
+
+        /* Section 2 */
+        .section-2 { background: #0a0a0a; display: flex; align-items: center; justify-content: center; padding: 60px 40px; }
+        .s2-frame { position: absolute; top: 50px; left: 35px; right: 35px; bottom: 35px; border: 1px solid rgba(255,255,255,0.12); pointer-events: none; }
+        .s2-big { position: absolute; font-family: 'Bebas Neue', sans-serif; font-size: clamp(180px,26vw,380px); color: rgba(255,255,255,0.02); letter-spacing: 25px; white-space: nowrap; pointer-events: none; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+        .s2-content { display: flex; align-items: center; gap: clamp(25px,4vw,70px); max-width: 1100px; width: 100%; position: relative; z-index: 2; }
+        .s2-left { flex: 1; max-width: 260px; opacity: 0; transform: translateX(-40px); }
+        .s2-left.in { animation: slideR 0.8s ease-out forwards; }
+        .s2-album { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .s2-album-cover { width: 45px; height: 45px; background: linear-gradient(135deg, #ff6b8a, #ff8fa3); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .s2-album-text { font-size: 11px; color: white; font-weight: 500; }
+        .s2-album-text span { display: block; font-weight: 400; opacity: 0.4; font-size: 10px; margin-top: 2px; }
+        .s2-quote { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.9; font-style: italic; }
+        .s2-photo-wrap { flex: 0 0 auto; opacity: 0; transform: translateY(40px); }
+        .s2-photo-wrap.in { animation: fadeUp 0.8s ease-out 0.2s forwards; }
+        .s2-photo { width: clamp(260px,34vw,400px); height: clamp(330px,48vw,530px); object-fit: cover; object-position: center 10%; display: block; }
+        .s2-right { flex: 1; max-width: 240px; text-align: right; opacity: 0; transform: translateX(40px); }
+        .s2-right.in { animation: slideL 0.8s ease-out 0.4s forwards; }
+        .s2-jp { font-size: 12px; color: rgba(255,255,255,0.3); line-height: 2.2; margin-bottom: 25px; letter-spacing: 2px; }
+        .s2-signature { font-family: 'Pacifico', cursive; font-size: clamp(30px,4vw,50px); color: white; transform: rotate(-4deg); margin-bottom: 20px; display: inline-block; }
+        .s2-quote2 { font-size: 10px; color: rgba(255,255,255,0.35); line-height: 1.9; }
+        .s2-quote2 .author { display: block; margin-top: 8px; font-style: italic; opacity: 0.5; }
+        .s2-katakana { position: absolute; bottom: 80px; left: 50px; font-size: 16px; color: rgba(255,255,255,0.03); letter-spacing: 6px; }
+        .s2-bottom { position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%); font-size: 9px; color: rgba(255,255,255,0.2); letter-spacing: 2px; }
+
+        /* Section 3 */
+        .section-3 { background: linear-gradient(135deg, #1a1a1a 0%, #2a1a2a 100%); display: flex; align-items: center; justify-content: center; padding: 60px 40px; overflow: hidden; }
+        .s3-deco { position: absolute; font-family: 'Bebas Neue', sans-serif; color: rgba(255,107,138,0.04); pointer-events: none; }
+        .s3-deco-1 { font-size: clamp(200px,30vw,400px); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+        .s3-deco-2 { font-size: 80px; top: 80px; left: 60px; }
+        .s3-deco-3 { font-size: 80px; bottom: 80px; right: 60px; }
+        .s3-content { text-align: center; max-width: 700px; position: relative; z-index: 2; }
+        .s3-big { font-family: 'Pacifico', cursive; font-size: clamp(36px,7vw,72px); color: #ff6b8a; margin-bottom: 30px; opacity: 0; transform: translateY(30px); }
+        .s3-big.in { animation: fadeUp 0.8s ease-out forwards; }
+        .s3-text { font-size: clamp(14px,2.5vw,18px); color: rgba(255,255,255,0.6); line-height: 2; font-weight: 300; margin-bottom: 30px; opacity: 0; }
+        .s3-text.in { animation: fadeUp 0.8s ease-out 0.2s forwards; }
+        .s3-rom { font-family: 'Pacifico', cursive; font-size: clamp(16px,3vw,24px); color: rgba(255,255,255,0.25); margin-bottom: 40px; opacity: 0; }
+        .s3-rom.in { animation: fadeUp 0.8s ease-out 0.4s forwards; }
+        .s3-photo-wrap { position: relative; display: inline-block; opacity: 0; transform: scale(0.9); }
+        .s3-photo-wrap.in { animation: fadeUp 0.8s ease-out 0.6s forwards; }
+        .s3-photo { width: clamp(200px,30vw,300px); height: clamp(200px,30vw,300px); border-radius: 50%; object-fit: cover; border: 4px solid rgba(255,107,138,0.3); }
+        .s3-photo-ring { position: absolute; inset: -15px; border: 1px dashed rgba(255,107,138,0.3); border-radius: 50%; animation: spin 20s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .s3-hearts { position: absolute; font-size: 20px; color: #ff6b8a; opacity: 0.15; }
+        .s3-h1 { top: 15%; left: 15%; animation: float 3s ease-in-out infinite; }
+        .s3-h2 { top: 20%; right: 15%; animation: float 3s ease-in-out 0.5s infinite; }
+        .s3-h3 { bottom: 20%; left: 20%; animation: float 3s ease-in-out 1s infinite; }
+        .s3-h4 { bottom: 15%; right: 20%; animation: float 3s ease-in-out 1.5s infinite; }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .s3-bottom { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); text-align: center; }
+        .s3-bottom .jp { font-size: 12px; color: rgba(255,255,255,0.15); letter-spacing: 4px; }
+        .s3-bottom .sub { font-size: 9px; color: rgba(255,255,255,0.1); letter-spacing: 3px; margin-top: 5px; }
+
+        /* Dots */
+        .dots { position: fixed; right: 25px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 100; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: #1a1a1a; opacity: 0.2; cursor: pointer; transition: all 0.3s; }
+        .dot.w { background: white; }
+        .dot.active { opacity: 1; transform: scale(1.3); }
+
+        .corner { position: fixed; bottom: 25px; right: 35px; text-align: right; z-index: 50; }
+        .corner .title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; color: #ff6b8a; }
+        .corner .sub { font-size: 8px; letter-spacing: 3px; color: #bbb; }
+        .credit { position: fixed; bottom: 25px; left: 35px; font-size: 9px; color: #ccc; font-style: italic; z-index: 50; }
+
+
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideR { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideL { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+
+        @media (max-width: 900px) {
+            .section-1 { flex-direction: column; }
+            .s1-left { flex: none; padding: 50px 25px 25px; order: 2; }
+            .s1-right { flex: 1; order: 1; min-height: 45vh; }
+            .s1-photo { clip-path: polygon(0 0,100% 0,100% 85%,0% 100%); height: 100%; max-width: 100%; }
+            .s1-watermark { writing-mode: horizontal-tb; top: 30%; right: auto; left: 50%; transform: translate(-50%,-50%); font-size: 100px; }
+            .s1-name { font-size: 55px; }
+            .s1-signature { font-size: 35px; }
+            .section-2 { padding: 50px 20px 30px; flex-direction: column; justify-content: flex-start; overflow-y: auto; }
+            .s2-frame { top: 50px; left: 15px; right: 15px; bottom: 20px; }
+            .s2-content { flex-direction: column; text-align: center; gap: 25px; padding-top: 15px; }
+            .s2-left, .s2-right { max-width: 100%; }
+            .s2-right { text-align: center; }
+            .s2-photo-wrap { order: -1; }
+            .s2-photo { width: 65vw; height: 50vh; }
+            .s2-katakana, .s2-bottom { display: none; }
+            .section-3 { padding: 50px 20px; }
+            .dots { right: 12px; }
+            .dot { width: 8px; height: 8px; }
+        }
+
+        @media (max-width: 480px) {
+            .s1-left { padding: 45px 18px 20px; }
+            .s1-name { font-size: 48px; letter-spacing: 3px; }
+            .s1-photo { height: 40vh; }
+            .s2-photo { width: 75vw; height: 45vh; }
+            .corner, .credit { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="paper-bg"></div>
+
+    <div class="preloader">
+        <div class="preloader-heart"></div>
+        <div class="preloader-text">Te iubesc, Лиля...</div>
+    </div>
+
+    <div class="marquee-wrap">
+        <div class="marquee-track">
+            <div class="marquee-item"><span class="text hl">Te iubesc</span><span class="lang">Română</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Я люблю тебя</span><span class="lang">Русский</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Je t'aime</span><span class="lang">Français</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Ti amo</span><span class="lang">Italiano</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Te amo</span><span class="lang">Español</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Ich liebe dich</span><span class="lang">Deutsch</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">愛してる</span><span class="lang">日本語</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">I love you</span><span class="lang">English</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Σ'αγαπώ</span><span class="lang">Ελληνικά</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Seni seviyorum</span><span class="lang">Türkçe</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Mahal kita</span><span class="lang">Filipino</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Ek is lief vir jou</span><span class="lang">Afrikaans</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text hl">Te iubesc</span><span class="lang">Română</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Я люблю тебя</span><span class="lang">Русский</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Je t'aime</span><span class="lang">Français</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Ti amo</span><span class="lang">Italiano</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Te amo</span><span class="lang">Español</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Ich liebe dich</span><span class="lang">Deutsch</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">愛してる</span><span class="lang">日本語</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">I love you</span><span class="lang">English</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Σ'αγαπώ</span><span class="lang">Ελληνικά</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Seni seviyorum</span><span class="lang">Türkçe</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Mahal kita</span><span class="lang">Filipino</span><span class="sep"></span></div>
+            <div class="marquee-item"><span class="text">Ek is lief vir jou</span><span class="lang">Afrikaans</span><span class="sep"></span></div>
+        </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="section section-1 active" data-section="1">
+        <div class="s1-left">
+            <h1 class="s1-name"><span>ЛИЛЯ</span></h1>
+            <p class="s1-subtitle">Лилечка, с днём рождения!</p>
+            <p class="s1-desc">Сегодня тебе исполняется 16 лет — пусть этот день будет таким же нежным, светлым и особенным, как ты сама.
+
+А эта маленькая открытка создана специально для тебя.</p>
+            <p class="s1-rom">Ești lumina ochilor mei</p>
+            <div class="s1-social">
+                <img src="photo6.jpg" alt="" class="avatar">
+                <a href="https://t.me/xayzeoff">Xayze</a>
+            </div>
+            <div class="s1-signature">Моя Лиля</div>
+            <div class="s1-buttons">
+                <a href="#" class="btn btn-fill" data-goto="2">ДАЛЕЕ →</a>
+            </div>
+        </div>
+        <div class="s1-right">
+            <div class="s1-watermark">ЛИЛЯ</div>
+            <img src="photo1.jpg" alt="Лиля" class="s1-photo">
+        </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section section-2" data-section="2">
+        <div class="s2-frame"></div>
+        <div class="s2-big">ЛЮБОВЬ</div>
+        <div class="s2-content">
+            <div class="s2-left">
+                <div class="s2-album">
+                    <div class="s2-album-cover">♥</div>
+                    <div class="s2-album-text">Наша история<span>Povestea noastră</span></div>
+                </div>
+                <p class="s2-quote">"Каждый день с тобой — как первый. Каждый момент — бесценный. Ты моя причина улыбаться."</p>
+            </div>
+            <div class="s2-photo-wrap"><img src="photo2.jpg" alt="Лиля" class="s2-photo"></div>
+            <div class="s2-right">
+                <p class="s2-jp">永遠の愛<br>私の全て</p>
+                <div class="s2-signature">My Heart</div>
+                <div class="s2-quote2">"Ты должна знать правила игры. А потом играть лучше всех."<span class="author">— Pentru Liля mea</span></div>
+            </div>
+        </div>
+        <div class="s2-katakana">マイガール</div>
+        <div class="s2-bottom">instagram.com/my_lilya</div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section section-3" data-section="3">
+        <div class="s3-deco s3-deco-1">❤</div>
+        <div class="s3-deco s3-deco-2">♥</div>
+        <div class="s3-deco s3-deco-3">♥</div>
+        <div class="s3-hearts s3-h1">♥</div>
+        <div class="s3-hearts s3-h2">♥</div>
+        <div class="s3-hearts s3-h3">♥</div>
+        <div class="s3-hearts s3-h4">♥</div>
+        <div class="s3-content">
+            <h2 class="s3-big">Навсегда</h2>
+            <p class="s3-text">Лилечка, с твоим 16-летием! 🎀💗
+
+Пусть в твоей жизни будет как можно больше счастливых моментов, искренних улыбок и исполнения самых заветных желаний.
+
+La mulți ani, iubirea mea! ✨
+Желаю тебе всегда быть счастливой, любимой и оставаться такой же прекрасной.
+
+Te iubesc foarte mult! 💕
+</p>
+            <p class="s3-rom">Pentru totdeauna, dragostea mea</p>
+            <div class="s3-photo-wrap">
+                <div class="s3-photo-ring"></div>
+                <img src="photo1.jpg" alt="Лиля" class="s3-photo">
+            </div>
+        </div>
+        <div class="s3-bottom">
+            <div class="jp">永遠に愛しています</div>
+            <div class="sub">С ДНЁМ РОЖДЕНИЯ, ЛИЛЯ</div>
+        </div>
+    </div>
+
+    <div class="dots">
+        <div class="dot active" data-goto="1"></div>
+        <div class="dot w" data-goto="2"></div>
+        <div class="dot w" data-goto="3"></div>
+    </div>
+
+    <div class="corner">
+        <div class="title">ЛИЛЯ</div>
+        <div class="sub">С ДНЁМ РОЖДЕНИЯ</div>
+    </div>
+    <div class="credit">создано с любовью</div>
+
+
+
+    <script>
+        // Preloader
+        window.addEventListener('load', () => {
+            setTimeout(() => document.querySelector('.preloader').classList.add('hide'), 1800);
+        });
+
+        // Navigation
+        let current = 1;
+        const total = 3;
+        let busy = false;
+
+        function goTo(n) {
+            if (busy || n === current || n < 1 || n > total) return;
+            busy = true;
+
+            document.querySelector(`.section-${current}`).classList.remove('active');
+            document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
+            document.querySelector(`.dot[data-goto="${n}"]`).classList.add('active');
+
+            if (n === 2) {
+                setTimeout(() => {
+                    document.querySelectorAll('.s2-left,.s2-photo-wrap,.s2-right').forEach(el => {
+                        el.classList.remove('in'); void el.offsetWidth; el.classList.add('in');
+                    });
+                }, 400);
+            }
+            if (n === 3) {
+                setTimeout(() => {
+                    document.querySelectorAll('.s3-big,.s3-text,.s3-rom,.s3-photo-wrap').forEach(el => {
+                        el.classList.remove('in'); void el.offsetWidth; el.classList.add('in');
+                    });
+                }, 400);
+            }
+
+            setTimeout(() => {
+                document.querySelector(`.section-${n}`).classList.add('active');
+                current = n;
+                setTimeout(() => busy = false, 700);
+            }, 350);
+        }
+
+        document.querySelectorAll('.dot').forEach(d => d.addEventListener('click', () => goTo(+d.dataset.goto)));
+        document.querySelectorAll('[data-goto]').forEach(el => {
+            el.addEventListener('click', e => { e.preventDefault(); goTo(+el.dataset.goto); });
+        });
+
+        let wheelT = 0;
+        document.addEventListener('wheel', e => {
+            const now = Date.now();
+            if (now - wheelT < 1200) return;
+            wheelT = now;
+            if (e.deltaY > 0 && current < total) goTo(current + 1);
+            else if (e.deltaY < 0 && current > 1) goTo(current - 1);
+        });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') goTo(current + 1);
+            else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') goTo(current - 1);
+        });
+
+        let tY = 0;
+        document.addEventListener('touchstart', e => tY = e.touches[0].clientY);
+        document.addEventListener('touchend', e => {
+            const d = tY - e.changedTouches[0].clientY;
+            if (Math.abs(d) > 50) {
+                if (d > 0 && current < total) goTo(current + 1);
+                else if (d < 0 && current > 1) goTo(current - 1);
+            }
+        });
+
+    </script>
+</body>
+</html>
