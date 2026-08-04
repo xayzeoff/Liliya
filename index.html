@@ -2,13 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ЛИЛЯ</title>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { background: #1a1a1a; }
-        body { font-family: 'Inter', sans-serif; overflow: hidden; background: #f0ebe4; min-height: 100vh; min-height: -webkit-fill-available; }
+        body { font-family: 'Inter', sans-serif; overflow: hidden; background: #f0ebe4; min-height: 100vh; min-height: 100dvh; }
 
         /* Preloader */
         .preloader { position: fixed; inset: 0; background: #f0ebe4; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.8s, visibility 0.8s; gap: 15px; }
@@ -88,7 +88,7 @@
         .s2-bottom { position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%); font-size: 9px; color: rgba(255,255,255,0.2); letter-spacing: 2px; }
 
         /* Section 3 */
-        .section-3 { background: linear-gradient(135deg, #1a1a1a 0%, #2a1a2a 100%); display: flex; align-items: center; justify-content: center; padding: 60px 40px; overflow: hidden; }
+        .section-3 { background: linear-gradient(135deg, #1a1a1a 0%, #2a1a2a 100%); display: flex; align-items: center; justify-content: center; padding: 60px 40px; overflow: hidden; padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
         .s3-deco { position: absolute; font-family: 'Bebas Neue', sans-serif; color: rgba(255,107,138,0.04); pointer-events: none; }
         .s3-deco-1 { font-size: clamp(200px,30vw,400px); top: 50%; left: 50%; transform: translate(-50%,-50%); }
         .s3-deco-2 { font-size: 80px; top: 80px; left: 60px; }
@@ -146,37 +146,27 @@
         }
 
         @media (max-width: 900px) {
-            .s3-deco, .s3-hearts, .s3-bottom .jp, .s3-bottom .sub {
-                display: none !important;
-                visibility: hidden !important;
-                opacity: 0 !important;
-            }
-            .section-3 { padding-bottom: 40px; }
-        }
-
-        @media (max-width: 900px) {
             .section { position: absolute; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
 
-            .section-1 { flex-direction: column; min-height: 100vh; height: auto; }
+            .section-1 { flex-direction: column; min-height: 100vh; min-height: 100dvh; height: auto; }
             .s1-left { flex: none; padding: 50px 25px 30px; order: 2; }
-            .s1-right { flex: none; order: 1; height: 50vh; min-height: 300px; }
+            .s1-right { flex: none; order: 1; height: 50vh; height: 50dvh; min-height: 300px; }
             .s1-photo { clip-path: polygon(0 0,100% 0,100% 85%,0% 100%); height: 100%; max-width: 100%; }
             .s1-watermark { writing-mode: horizontal-tb; top: 30%; right: auto; left: 50%; transform: translate(-50%,-50%); font-size: 100px; }
             .s1-name { font-size: 55px; }
             .s1-signature { font-size: 35px; }
 
-            .section-2 { padding: 70px 20px 40px; min-height: 100vh; height: auto; }
+            .section-2 { padding: 70px 20px 40px; min-height: 100vh; min-height: 100dvh; height: auto; }
             .s2-frame { top: 70px; left: 15px; right: 15px; bottom: 30px; }
             .s2-content { flex-direction: column; text-align: center; gap: 25px; padding-top: 10px; }
             .s2-left, .s2-right { max-width: 100%; }
             .s2-right { text-align: center; }
             .s2-photo-wrap { order: -1; }
-            .s2-photo { width: 60vw; height: 45vh; }
+            .s2-photo { width: 60vw; height: 45vh; height: 45dvh; }
             .s2-katakana, .s2-bottom { display: none; }
 
-            .section-3 { padding: 70px 20px 60px; min-height: 100vh; height: auto; flex-direction: column; overflow: visible; }
-            .s3-deco { display: none !important; visibility: hidden !important; }
-            .s3-hearts { display: none !important; visibility: hidden !important; }
+            .section-3 { padding: 70px 20px 80px; min-height: 100vh; min-height: 100dvh; height: auto; flex-direction: column; }
+            .s3-deco, .s3-hearts { display: none !important; visibility: hidden !important; opacity: 0 !important; }
             .s3-content { padding: 20px 0 40px; position: relative; z-index: 2; }
             .s3-big { font-size: 36px; margin-bottom: 20px; }
             .s3-text { font-size: 13px; line-height: 1.8; margin-bottom: 20px; }
@@ -184,6 +174,7 @@
             .s3-photo { width: 150px; height: 150px; }
             .s3-photo-ring { inset: -10px; }
             .s3-bottom { position: relative; bottom: auto; left: auto; transform: none; margin-top: 30px; }
+            .s3-bottom .jp, .s3-bottom .sub { display: none; }
 
             .dots { right: 12px; }
             .dot { width: 8px; height: 8px; }
@@ -195,9 +186,9 @@
             .s1-subtitle { font-size: 12px; }
             .s1-desc { font-size: 11px; }
             .s1-signature { font-size: 28px; }
-            .s1-right { height: 40vh; min-height: 250px; }
+            .s1-right { height: 40vh; height: 40dvh; min-height: 250px; }
 
-            .s2-photo { width: 70vw; height: 40vh; }
+            .s2-photo { width: 70vw; height: 40vh; height: 40dvh; }
 
             .s3-big { font-size: 30px; }
             .s3-text { font-size: 12px; }
