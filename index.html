@@ -131,6 +131,18 @@
         @keyframes slideR { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes slideL { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
 
+        /* Safari fixes */
+        @supports (-webkit-touch-callout: none) {
+            .section { -webkit-transform: translate3d(0,0,0); }
+            .section-3 { overflow: visible !important; }
+            .s3-deco, .s3-hearts { 
+                display: none !important; 
+                visibility: hidden !important; 
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+        }
+
         @media (max-width: 900px) {
             .section { position: absolute; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
 
@@ -151,11 +163,10 @@
             .s2-photo { width: 60vw; height: 45vh; }
             .s2-katakana, .s2-bottom { display: none; }
 
-            .section-3 { padding: 70px 20px 60px; min-height: 100vh; height: auto; flex-direction: column; }
-            .s3-deco-1 { font-size: 150px; }
-            .s3-deco-2, .s3-deco-3 { display: none; }
-            .s3-hearts { display: none; }
-            .s3-content { padding: 20px 0 40px; }
+            .section-3 { padding: 70px 20px 60px; min-height: 100vh; height: auto; flex-direction: column; overflow: visible; }
+            .s3-deco { display: none !important; visibility: hidden !important; }
+            .s3-hearts { display: none !important; visibility: hidden !important; }
+            .s3-content { padding: 20px 0 40px; position: relative; z-index: 2; }
             .s3-big { font-size: 36px; margin-bottom: 20px; }
             .s3-text { font-size: 13px; line-height: 1.8; margin-bottom: 20px; }
             .s3-rom { font-size: 16px; margin-bottom: 25px; }
